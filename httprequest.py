@@ -11,7 +11,7 @@ filePath = 'C:\PythonPVfile\ppppp.xml'  # path used to store data
 
 #mysql server connection settings
 mysql_host='192.168.1.15'
-mysql_user= 'username'
+mysql_user= 'user'
 mysql_pass= 'pass'
 mysql_db='pv_db'
 
