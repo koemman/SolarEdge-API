@@ -12,7 +12,7 @@ siteID = 1234 # add site id from Solaredge portal
 #mysql server connection settings
 mysql_host='192.168.1.15'
 mysql_user= 'username'
-mysql_pass= 'passwo'
+mysql_pass= 'pass'
 mysql_db='pv_db'
 
 
