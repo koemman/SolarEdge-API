@@ -30,7 +30,8 @@ client.switch_database(db)
 results=client.query('SELECT last(totalActivePower), time FROM inverter_data')
 lastpoint=list(results.get_points(measurement='inverter_data'))
 stday=str(dateutil.parser.parse(lastpoint[0]['time']).date())
-sttime=str(dateutil.parser.parse(lastpoint[0]['time']).time())
+sttime=str((dateutil.parser.parse(lastpoint[0]['time'])+timedelta(seconds=5)).time())  # add 5 seconds to avoid duplicate entries
+
 enday=str(dateutil.parser.parse(lastpoint[0]['time']).date()+timedelta(days=6))
 
 #url for the request
