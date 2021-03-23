@@ -7,13 +7,15 @@ import sys
 import secrets as sc
 import pandas as pd 
 
-filename="inverterdata"
+
+#dtime=str(datetime.now()).split(".")[0].replace(" ","").replace("-","").replace(":","")
+dtime="ccdd"
 #site parameters
 siteID = sc.siteID # add site id from Solaredge portal
 invID = sc.invID  # string inverter ID  from Solaredge portal
 apiKey = sc.apiKey  # api KEY from Solaredge portal
-filePath = sc.inputpath +"/" + filename + ".csv"  # path used to download data
-outPath = sc.outputpath +"/" + filename + ".csv" # path used to export the processed data
+filePath = sc.inputpath +"/" + dtime + ".csv"  # path used to download data
+outPath = sc.outputpath +"/" + dtime + ".csv" # path used to export the processed data
 server_address=sc.influx_server
 server_port=sc.influx_port
 db=sc.database
@@ -25,16 +27,17 @@ client=InfluxDBClient(host=server_address,port=server_port)
 client.switch_database(db)
 
 #query database to get the datetime of latest entry
-results=client.query('SELECT last(totalActivePower), time FROM inverter_data')
+results=client.query('SELECT first(totalActivePower), time FROM inverter_data')
 lastpoint=list(results.get_points(measurement='inverter_data'))
-stday=str(dateutil.parser.parse(lastpoint[0]['time']).date())
-sttime=str((dateutil.parser.parse(lastpoint[0]['time'])+timedelta(seconds=5)).time())  # add 5 seconds to avoid duplicate entries
+enday=str(dateutil.parser.parse(lastpoint[0]['time']).date())
+endtime=str((dateutil.parser.parse(lastpoint[0]['time'])+timedelta(seconds=-5)).time())  # remove 5 seconds to avoid duplicate entries
 
-enday=str(dateutil.parser.parse(lastpoint[0]['time']).date()+timedelta(days=6))
+stday=str(dateutil.parser.parse(lastpoint[0]['time']).date()+timedelta(days=-6))
+# print(stday,sttime,enday)
 
 #url for the request
 url = 'https://monitoringapi.solaredge.com/equipment/'+ str(
-    siteID) + '/' + invID + '/data.csv?' + 'startTime='+ stday + '%20' + sttime + '&endTime=' + enday + '%2023:59:59'+'&api_key='+ apiKey
+    siteID) + '/' + invID + '/data.csv?' + 'startTime='+ stday + '%2000:00:05' + '&endTime=' + enday + '%20'+ endtime+'&api_key='+ apiKey
 
 
 try:
@@ -44,6 +47,7 @@ except Exception as e:
 
 
 ##Processing the data
+
 #read_csv to dataframe
 data=pd.read_csv(filePath)
 data.dropna(subset=['date'],inplace=True) #delete empty rows(without date)
