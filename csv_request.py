@@ -7,7 +7,7 @@ import sys
 import secrets as sc
 import pandas as pd 
 
-filename="inverterdata"
+filename="inverter_data"
 #site parameters
 siteID = sc.siteID # add site id from Solaredge portal
 invID = sc.invID  # string inverter ID  from Solaredge portal
