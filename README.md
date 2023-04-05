@@ -1,4 +1,4 @@
 # SolarEdge-API
-It connects to SolarEdge Web server and downloads inverter data in csv file
+Python scripts for http requests to SolarEdge API. Two scrips for inverter data and site energy.
 
-Then the data are imported in an Influxdb server by telegraf plugin
+Data downloaded to csv fotmat and are imported in an Influxdb server by the telegraf plugin
